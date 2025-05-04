@@ -485,7 +485,7 @@ Si cette approche ne fonctionne pas bien pour vous, voici quelques alternatives:
 
 Les contributions à ce projet sont les bienvenues! N'hésitez pas à:
 
-1. Fork ce dépôt
+1. Forker ce dépôt
 2. Créer une branche pour vos modifications (`git checkout -b feature/amelioration`)
 3. Committer vos changements (`git commit -am 'Ajout de fonctionnalité X'`)
 4. Pousser vers la branche (`git push origin feature/amelioration`)
