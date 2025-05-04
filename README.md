@@ -2,7 +2,7 @@
 
 Un guide complet pour installer et configurer i3 window manager sur Windows Subsystem for Linux (WSL) avec Xephyr comme serveur X imbriqué.
 
-![i3 sur WSL avec Xephyr](https://raw.githubusercontent.com/valorisa/i3-wsl-xephyr/main/screenshots/demo_des_matieres.png)
+![i3 sur WSL avec Xephyr](https://github.com/valorisa/i3-wsl-xephyr/blob/main/Screenshot4.png)
 
 - [Introduction](#introduction)
 - [Pourquoi utiliser i3 avec WSL et Xephyr?](#pourquoi-utiliser-i3-avec-wsl-et-xephyr)
