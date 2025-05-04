@@ -4,29 +4,38 @@ Un guide complet pour installer et configurer i3 window manager sur Windows Subs
 
 ![i3 sur WSL avec Xephyr](https://github.com/valorisa/i3-wsl-xephyr/blob/main/Screenshot4.png)
 
-- [Introduction](#introduction)
-- [Pourquoi utiliser i3 avec WSL et Xephyr?](#pourquoi-utiliser-i3-avec-wsl-et-xephyr)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-  - [Étape 1: Configurer WSL](#étape-1-configurer-wsl)
-  - [Étape 2: Installer les dépendances](#étape-2-installer-les-dépendances)
-  - [Étape 3: Installer i3](#étape-3-installer-i3)
-  - [Étape 4: Installer Xephyr](#étape-4-installer-xephyr)
-  - [Étape 5: Configurer le serveur X](#étape-5-configurer-le-serveur-x)
-- [Configuration](#configuration)
-  - [Configuration de base i3](#configuration-de-base-i3)
-  - [Configuration de Xephyr](#configuration-de-xephyr)
-  - [Script de lancement automatique](#script-de-lancement-automatique)
-- [Utilisation](#utilisation)
-  - [Lancer i3 dans Xephyr](#lancer-i3-dans-xephyr)
-  - [Raccourcis clavier essentiels](#raccourcis-clavier-essentiels)
-  - [Personnalisation avancée](#personnalisation-avancée)
-- [Problèmes connus et solutions](#problèmes-connus-et-solutions)
-- [Amélioration des performances](#amélioration-des-performances)
-- [Alternatives](#alternatives)
-- [Ressources supplémentaires](#ressources-supplémentaires)
-- [Contribution](#contribution)
-- [Licence](#licence)
+- [i3-wsl-xephyr](#i3-wsl-xephyr)
+  - [Introduction](#introduction)
+  - [Pourquoi utiliser i3 avec WSL et Xephyr?](#pourquoi-utiliser-i3-avec-wsl-et-xephyr)
+  - [Prérequis](#prérequis)
+  - [Installation](#installation)
+    - [Étape 1: Configurer WSL](#étape-1-configurer-wsl)
+    - [Étape 2: Installer les dépendances](#étape-2-installer-les-dépendances)
+    - [Étape 3: Installer i3](#étape-3-installer-i3)
+      - [Option A: Installation depuis les dépôts (plus simple)](#option-a-installation-depuis-les-dépôts-plus-simple)
+      - [Option B: Compilation depuis les sources (recommandé pour WSL)](#option-b-compilation-depuis-les-sources-recommandé-pour-wsl)
+    - [Étape 4: Installer Xephyr](#étape-4-installer-xephyr)
+    - [Étape 5: Configurer le serveur X](#étape-5-configurer-le-serveur-x)
+  - [Configuration](#configuration)
+    - [Configuration de base i3](#configuration-de-base-i3)
+    - [Script de lancement automatique](#script-de-lancement-automatique)
+  - [Utilisation](#utilisation)
+    - [Lancer i3 dans Xephyr](#lancer-i3-dans-xephyr)
+    - [Raccourcis clavier essentiels](#raccourcis-clavier-essentiels)
+    - [Personnalisation avancée](#personnalisation-avancée)
+      - [Changement de la touche $mod](#changement-de-la-touche-mod)
+      - [Ajout des espaces entre les fenêtres](#ajout-des-espaces-entre-les-fenêtres)
+      - [Personnalisation de la barre de statut](#personnalisation-de-la-barre-de-statut)
+  - [Problèmes connus et solutions](#problèmes-connus-et-solutions)
+    - [Problème: "Cannot open display"](#problème-cannot-open-display)
+    - [Problème: "Another window manager seems to be running"](#problème-another-window-manager-seems-to-be-running)
+    - [Problème: Interface graphique lente ou saccadée](#problème-interface-graphique-lente-ou-saccadée)
+    - [Problème: Raccourcis clavier qui ne fonctionnent pas](#problème-raccourcis-clavier-qui-ne-fonctionnent-pas)
+  - [Amélioration des performances](#amélioration-des-performances)
+  - [Alternatives](#alternatives)
+  - [Ressources supplémentaires](#ressources-supplémentaires)
+  - [Contribution](#contribution)
+  - [Licence](#licence)
 
 ## Introduction
 
@@ -298,7 +307,7 @@ Quelques personnalisations populaires:
 
 Pour utiliser la touche Windows au lieu de Alt:
 
-```
+```text
 set $mod Mod4  # Au lieu de Mod1
 ```
 
@@ -333,7 +342,7 @@ sudo make install
 
 Puis ajoutez à votre configuration i3:
 
-```
+```text
 # Espacement entre les fenêtres
 gaps inner 10
 gaps outer 5
@@ -349,7 +358,7 @@ sudo apt install -y i3blocks
 
 Puis modifiez la configuration de la barre dans ~/.config/i3/config:
 
-```
+```text
 bar {
     status_command i3blocks
     position top
@@ -364,11 +373,14 @@ bar {
 **Symptômes**: Les applications graphiques affichent "Cannot open display" ou "Xephyr cannot open host display".
 
 **Solutions**:
+
 1. Vérifiez que le serveur X est en cours d'exécution sur Windows
 2. Confirmez que la variable DISPLAY est bien configurée:
+
    ```bash
    export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf):0.0
    ```
+
 3. Vérifiez les paramètres du pare-feu Windows: autorisez les connexions entrantes sur le port 6000
 
 ### Problème: "Another window manager seems to be running"
@@ -376,12 +388,15 @@ bar {
 **Symptômes**: i3 affiche "ERROR: Another window manager seems to be running"
 
 **Solutions**:
+
 1. Utilisez Xephyr comme serveur X imbriqué:
+
    ```bash
    Xephyr -ac -br -noreset -screen 1280x720 :1 &
    export DISPLAY=:1
    i3
    ```
+
 2. Si vous n'utilisez pas Xephyr, vérifiez qu'aucun autre gestionnaire de fenêtres n'est en cours d'exécution
 
 ### Problème: Interface graphique lente ou saccadée
@@ -389,10 +404,13 @@ bar {
 **Symptômes**: Performances lentes, animations saccadées
 
 **Solutions**:
+
 1. Réduisez la résolution de Xephyr:
+
    ```bash
    Xephyr -ac -br -noreset -screen 1024x768 :1
    ```
+
 2. Désactivez les effets graphiques dans la configuration i3
 3. Vérifiez la charge CPU/mémoire avec `top` ou `htop`
 
@@ -401,9 +419,11 @@ bar {
 **Symptômes**: Certains raccourcis i3 ne répondent pas
 
 **Solutions**:
+
 1. Vérifiez que les raccourcis ne sont pas capturés par Windows
 2. Modifiez la touche $mod dans la configuration i3:
-   ```
+
+   ```text
    set $mod Mod1  # Alt
    # ou
    set $mod Mod4  # Touche Windows
@@ -419,7 +439,8 @@ Pour améliorer les performances de i3 sous WSL avec Xephyr:
 
 2. **Optimisez WSL**:
    Créez/modifiez le fichier `.wslconfig` dans votre dossier utilisateur Windows (`C:\Users\`):
-   ```
+
+   ```text
    [wsl2]
    memory=4GB
    processors=2
@@ -428,7 +449,8 @@ Pour améliorer les performances de i3 sous WSL avec Xephyr:
 
 3. **Réduisez le polling**:
    Dans votre configuration i3, augmentez les délais de rafraîchissement:
-   ```
+
+   ```text
    force_display_urgency_hint 500 ms
    ```
 
@@ -437,12 +459,14 @@ Pour améliorer les performances de i3 sous WSL avec Xephyr:
 Si cette approche ne fonctionne pas bien pour vous, voici quelques alternatives:
 
 1. **VcXsrv avec i3**: Utilisez VcXsrv en mode plein écran avec i3 directement, sans Xephyr
+
    ```bash
    export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf):0.0
    i3
    ```
 
 2. **i3-on-wsl**: Un dépôt GitHub avec une configuration i3 préoptimisée pour WSL
+
    ```bash
    git clone https://github.com/Lamarcke/i3-on-wsl.git
    ```
@@ -476,26 +500,26 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 Créé avec ❤️ pour la communauté i3 et WSL. Faites bon usage de votre nouvel environnement de travail!
 
 Citations:
-[1] https://pplx-res.cloudinary.com/image/private/user_uploads/40251661/ofPYrOhhVlJsIHS/Screenshot4.jpg
-[2] https://github.com/Lamarcke/i3-on-wsl
-[3] https://github.com/pzmarzly/xephyr-now/blob/master/README.md
-[4] https://ha.zardo.us/blog/i3wsl
-[5] https://www.reddit.com/r/bashonubuntuonwindows/comments/zffsva/my_little_frankenstein_fully_working_i3_on_wsl2/?tl=fr
-[6] https://learn.microsoft.com/fr-fr/windows/wsl/troubleshooting
-[7] https://github.com/microsoft/wslg/issues/154
-[8] https://gist.github.com/taoy/8b44beef41f833280e0edc96c8e3306a
-[9] https://misterderpie.com/posts/ubuntu-wsl2-i3/
-[10] https://github.com/mikeroyal/WSL-Guide
-[11] https://labex.io/fr/tutorials/git-installing-a-git-server-299593
-[12] https://gist.github.com/dcasati/fe4e8b366ea0e006566968f6a0e860c2
-[13] https://www.youtube.com/watch?v=1YVx_C2MZOg
-[14] https://github.com/ethanhs/WSL-PROGRAMS
-[15] https://github.com/budRich/xwmplay/blob/master/README.md
-[16] https://www.reddit.com/r/bashonubuntuonwindows/comments/zffsva/my_little_frankenstein_fully_working_i3_on_wsl2/
-[17] https://gist.github.com/tdcosta100/385636cbae39fc8cd0937139e87b1c74?permalink_comment_id=3937026
-[18] https://github.com/Xyene/wsl-dotfiles
-[19] https://doc.fedora-fr.org/wiki/I3wm
-[20] https://learn.microsoft.com/fr-fr/windows/wsl/tutorials/wsl-git
-[21] https://github.com/sirredbeard/awesome-wsl
+[1] <https://pplx-res.cloudinary.com/image/private/user_uploads/40251661/ofPYrOhhVlJsIHS/Screenshot4.jpg>
+[2] <https://github.com/Lamarcke/i3-on-wsl>
+[3] <https://github.com/pzmarzly/xephyr-now/blob/master/README.md>
+[4] <https://ha.zardo.us/blog/i3wsl>
+[5] <https://www.reddit.com/r/bashonubuntuonwindows/comments/zffsva/my_little_frankenstein_fully_working_i3_on_wsl2/?tl=fr>
+[6] <https://learn.microsoft.com/fr-fr/windows/wsl/troubleshooting>
+[7] <https://github.com/microsoft/wslg/issues/154>
+[8] <https://gist.github.com/taoy/8b44beef41f833280e0edc96c8e3306a>
+[9] <https://misterderpie.com/posts/ubuntu-wsl2-i3/>
+[10] <https://github.com/mikeroyal/WSL-Guide>
+[11] <https://labex.io/fr/tutorials/git-installing-a-git-server-299593>
+[12] <https://gist.github.com/dcasati/fe4e8b366ea0e006566968f6a0e860c2>
+[13] <https://www.youtube.com/watch?v=1YVx_C2MZOg>
+[14] <https://github.com/ethanhs/WSL-PROGRAMS>
+[15] <https://github.com/budRich/xwmplay/blob/master/README.md>
+[16] <https://www.reddit.com/r/bashonubuntuonwindows/comments/zffsva/my_little_frankenstein_fully_working_i3_on_wsl2/>
+[17] <https://gist.github.com/tdcosta100/385636cbae39fc8cd0937139e87b1c74?permalink_comment_id=3937026>
+[18] <https://github.com/Xyene/wsl-dotfiles>
+[19] <https://doc.fedora-fr.org/wiki/I3wm>
+[20] <https://learn.microsoft.com/fr-fr/windows/wsl/tutorials/wsl-git>
+[21] <https://github.com/sirredbeard/awesome-wsl>
 
 ---
