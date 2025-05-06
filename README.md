@@ -497,7 +497,7 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 ---
 
-Créé avec ❤️ pour la communauté i3 et WSL. Faites bon usage de votre nouvel environnement de travail!
+Créé par valorisa pour la communauté i3 et WSL. Faites bon usage de votre nouvel environnement de travail!
 
 Citations:
 [1] <https://pplx-res.cloudinary.com/image/private/user_uploads/40251661/ofPYrOhhVlJsIHS/Screenshot4.jpg>
@@ -523,3 +523,5 @@ Citations:
 [21] <https://github.com/sirredbeard/awesome-wsl>
 
 ---
+
+**Note**: Ce guide est en constante évolution. Si vous rencontrez des problèmes ou avez des suggestions, n'hésitez pas à ouvrir une issue ou à soumettre une pull request sur GitHub.
